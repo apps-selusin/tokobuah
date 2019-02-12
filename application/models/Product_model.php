@@ -31,6 +31,7 @@ class Product_model extends CI_Model {
 		$this->product_id = uniqid();
 		$this->name = $post["name"];
 		$this->price = $post["price"];
+		$this->image = $this->_uploadImage();
 		$this->description = $post["description"];
 		$this->db->insert($this->_table, $this);
 	}
@@ -40,12 +41,45 @@ class Product_model extends CI_Model {
 		$this->product_id = $post["id"];
 		$this->name = $post["name"];
 		$this->price = $post["price"];
+		
+		if (!empty($_FILES["image"]["name"])) {
+			$this->image = $this->_uploadImage();
+		}
+		else {
+			$this->image = $post["old_image"];
+		}
+		
 		$this->description = $post["description"];
 		$this->db->update($this->_table, $this, array("product_id" => $post["id"]));
 	}
 	
 	public function delete ($id) {
+		$this->_deleteImage($id);
 		return $this->db->delete($this->_table, array("product_id" => $id));
+	}
+	
+	private function _uploadImage() {
+		$config["upload_path"]   = "./upload/product/";
+		$config["allowed_types"] = "gif|jpg|png|jpeg";
+		$config["file_name"] 	 = $this->product_id;
+		$config["overwrite"] 	 = true;
+		$config["max_size"] 	 = 1024;
+		
+		$this->load->library("upload", $config);
+		
+		if ($this->upload->do_upload("image")) {
+			return $this->upload->data("file_name");
+		}
+		
+		return "default.jpg";
+	}
+	
+	private function _deleteImage($id) {
+		$product = $this->getById($id);
+		if ($product->image != "default.jpg") {
+			$filename = explode(".", $product->image)[0];
+			return array_map("unlink", glob(FCPATH . "upload/product/$filename.*"));
+		}
 	}
 	
 }
