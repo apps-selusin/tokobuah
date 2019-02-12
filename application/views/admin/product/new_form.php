@@ -29,7 +29,7 @@
 						<a href="<?php echo site_url('admin/products/') ?>"><i class="fas fa-arrow-left"></i> Back</a>
 					</div>
 					<div class="card-body">
-						<form action="<?php base_url('admin/product/add') ?>" method="post" enctype="multipart/form-data">
+						<form action="<?php base_url('admin/products/add') ?>" method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<label for="name">Name*</label>
 								<input class="form-control <?php echo form_error('name') ? 'is-invalid' : '' ?>" 

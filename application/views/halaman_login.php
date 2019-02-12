@@ -1,6 +1,6 @@
 <?php defined("BASEPATH") or exit("No direct script access allowed"); ?>
 
-<form action="<?php echo base_url('login/proses_login') ?>" method="post">
+<form action="<?php base_url('login/proses_login') ?>" method="post">
 	<div class="form-group has-feedback">
 		<input type="text" class="form-control" placeholder="Username atau Email"
 			name="username" required id="username" />
